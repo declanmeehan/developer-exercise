@@ -9,15 +9,96 @@
   <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 </head>
-<body>
-  <div id="quotes"></div>
-  <script type="text/babel">
-    ReactDOM.render(
-      <div>
-        <h1>Quotes</h1>
-      </div>,
-      document.getElementById('quotes')
+<div id="quote"></div>
+
+  <body>
+    <script type="text/babel">
+      class App extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            quoteData: [],
+            page: 0
+          };
+        }
+        componentDidMount() {
+          let quoteUrl = 'https://gist.githubusercontent.com/anonymous/8f61a8733ed7fa41c4ea/raw/1e90fd2741bb6310582e3822f59927eb535f6c73/quotes.json';
+          fetch(quoteUrl).then(response => {
+            return response.json();
+          }).then(data => {
+           let content = data.map((contents) => {
+              return (
+              <div>
+                <h3> Source: {contents.source} </h3>
+                <li>Quote: {contents.quote} </li>
+                <li> Context: {contents.context} </li>
+                <li> Theme: {contents.theme} </li>
+              </div>
+              );
+            })
+            this.setState({quoteData: content });
+            console.log(data);
+            //let quoteJson = response; 
+              
+            });
+        };
+        render() {
+          return (
+            //  var i;
+           //   for(i = 0; i < 15; i++) { 
+           //     console.log("15", this.state.quoteData[i]);
+          //    }
+            <h1>Quote</h1>
+           // <div> {this.state.quoteData[i]} </div>
+            
+            
+            //<button style={{display: 'inline-block'}}> Previous page </button>
+            //<button style={{display: 'inline-block'}}> next page </button>
+
+          );
+        }
+      }
+
+      class Pagination extends React.Component {
+        constructor(props) {
+          super(props);
+          this.handleForwardClick = 
+          this.handleForwardClick.bind(this);
+          this.handleBackwardClick = 
+          this.handleBackwardClick.bind(this);
+          this.setState = {page: 0}
+        }
+
+        handleBackwardClick() {
+          this.props.setState({page: {this.state.page - 1}});
+        }
+
+        handleForwardClick() {
+          this.setState({page: {this.state.page + 1}});
+        }
+
+        render () {
+          const currentPage = this.state.page;
+
+          const forwardButton = 
+          <button onClick={this.handleForwardClick} />
+
+          const backwardButton = 
+          <button onClick={this.handleBackwardClick} />
+        }
+
+        return ( 
+            {backwardButton, forwardButton}
+          );
+      }
+
+
+
+  ReactDOM.render(
+      <App />,
+      <Pagination />
+      document.getElementById('quote')
     );
-  </script>
-</body>
+    </script>
+  </body>
 </html>
